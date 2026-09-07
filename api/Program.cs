@@ -16,7 +16,6 @@ builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 1024L * 1024L * 1024L;
 });
-builder.Services.AddOpenApi();
 builder.Services.AddScoped<UpdateService>();
 
 var provider = builder.Configuration["Database:Provider"] ?? "Sqlite";
@@ -78,11 +77,6 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<UpdateDbContext>();
     await db.Database.EnsureCreatedAsync();
     await DbSeeder.SeedAsync(db);
-}
-
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
 }
 
 app.UseCors("panel");
