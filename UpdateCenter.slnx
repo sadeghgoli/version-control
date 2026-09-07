@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/api/">
+    <Project Path="api/UpdateCenter.Api.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,15 @@
+@UpdateCenter.Api_HostAddress = http://localhost:5106
+
+### بررسی آپدیت
+POST {{UpdateCenter.Api_HostAddress}}/api/update/check
+Content-Type: application/json
+
+{
+  "appId": "APP-137-WIN",
+  "platform": "windows",
+  "version": "1.0.2",
+  "build": 102
+}
+
+###
+GET {{UpdateCenter.Api_HostAddress}}/api/update/check?appId=APP-137-WIN&version=1.0.2

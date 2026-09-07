@@ -1,0 +1,11 @@
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
+storage/
+.vs/
+.idea/
+panel/node_modules/
+panel/dist/
+*.user
