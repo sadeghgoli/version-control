@@ -1,22 +1,13 @@
-export function apiBase(): string {
-  const raw = (import.meta.env.VITE_API_URL ?? '').trim();
-  if (!raw) {
-    return '';
-  }
-  return raw.replace(/\/+$/, '').replace(/\/api$/i, '');
-}
+import { apiUrl } from './config';
 
-export function apiUrl(path: string): string {
-  if (/^https?:\/\//i.test(path)) {
-    return path;
-  }
-  const suffix = path.startsWith('/') ? path : `/${path}`;
-  return `${apiBase()}${suffix}`;
-}
+export { apiUrl };
 
 function formatError(status: number, bodyMessage?: string): string {
   if (status === 401) {
     return 'نشست ورود ذخیره نشد. دوباره وارد شوید.';
+  }
+  if (status === 405) {
+    return 'درخواست به پنل خورده نه به API. فایل config.json را روی سرور پنل بررسی کنید.';
   }
   return bodyMessage || 'خطا در ارتباط با سرور';
 }
