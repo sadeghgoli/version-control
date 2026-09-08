@@ -1,5 +1,8 @@
 export function apiBase(): string {
-  const raw = (import.meta.env.VITE_API_URL || 'https://apiweb-versioncontrol.sabzevar.ir:5023').trim();
+  const raw = (import.meta.env.VITE_API_URL ?? '').trim();
+  if (!raw) {
+    return '';
+  }
   return raw.replace(/\/+$/, '').replace(/\/api$/i, '');
 }
 
@@ -11,33 +14,43 @@ export function apiUrl(path: string): string {
   return `${apiBase()}${suffix}`;
 }
 
+function formatError(status: number, bodyMessage?: string): string {
+  if (status === 401) {
+    return 'نشست ورود ذخیره نشد. دوباره وارد شوید.';
+  }
+  return bodyMessage || 'خطا در ارتباط با سرور';
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
   if (init?.body && !(init.body instanceof FormData) && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
 
-  const response = await fetch(apiUrl(path), {
-    ...init,
-    headers,
-    credentials: 'include',
-  });
+  let response: Response;
+  try {
+    response = await fetch(apiUrl(path), {
+      ...init,
+      headers,
+      credentials: 'include',
+    });
+  } catch {
+    throw new Error('ارتباط با سرور برقرار نشد.');
+  }
 
   if (response.status === 401) {
-    throw new Error('UNAUTHORIZED');
+    throw new Error(formatError(401));
   }
 
   if (!response.ok) {
-    let message = 'خطا در ارتباط با سرور';
+    let message: string | undefined;
     try {
       const body = (await response.json()) as { message?: string };
-      if (body.message) {
-        message = body.message;
-      }
+      message = body.message;
     } catch {
       /* ignore */
     }
-    throw new Error(message);
+    throw new Error(formatError(response.status, message));
   }
 
   if (response.status === 204) {

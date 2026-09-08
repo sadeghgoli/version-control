@@ -33,11 +33,12 @@ builder.Services.AddDbContext<UpdateDbContext>(options =>
     }
 });
 
-var panelOrigin = builder.Configuration["Panel:Origin"] ?? "http://localhost:5174";
+var panelOrigins = builder.Configuration.GetSection("Panel:Origins").Get<string[]>()
+    ?? [builder.Configuration["Panel:Origin"] ?? "http://localhost:5174"];
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("panel", policy =>
-        policy.WithOrigins(panelOrigin)
+        policy.WithOrigins(panelOrigins.Where(origin => !string.IsNullOrWhiteSpace(origin)).ToArray())
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());
