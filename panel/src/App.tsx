@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
-import { api, type Application, type Release, type SessionUser } from './api';
+import { api, apiUrl, type Application, type Release, type SessionUser } from './api';
 
 const platforms: Record<string, string> = {
   Windows: 'ویندوز',
@@ -209,8 +209,8 @@ export function App() {
                             <a
                               href={
                                 release.status === 'Published'
-                                  ? release.files[0].downloadUrl
-                                  : `/api/releases/${encodeURIComponent(release.id)}/download`
+                                  ? apiUrl(release.files[0].downloadUrl)
+                                  : apiUrl(`/api/releases/${encodeURIComponent(release.id)}/download`)
                               }
                               target="_blank"
                               rel="noreferrer"
@@ -340,7 +340,7 @@ function LoginScreen({ onLogin }: { onLogin: (user: SessionUser) => void }) {
         <button type="submit" className="btn btn-primary" disabled={busy}>
           {busy ? '...' : 'ورود'}
         </button>
-        <a className="sso" href="/api/auth/sso-login">
+        <a className="sso" href={apiUrl('/api/auth/sso-login')}>
           ورود با SSO
         </a>
       </form>

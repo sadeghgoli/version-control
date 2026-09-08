@@ -7,8 +7,9 @@ export default defineConfig({
     port: 5174,
     proxy: {
       '/api': {
-        target: 'http://localhost:5106',
+        target: 'https://apiweb-versioncontrol.sabzevar.ir:5023',
         changeOrigin: true,
+        secure: false,
       },
     },
   },

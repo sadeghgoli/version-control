@@ -48,9 +48,9 @@ builder.Services
     .AddCookie(options =>
     {
         options.Cookie.Name = "uc.session";
-        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.SameSite = SameSiteMode.None;
         options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.SlidingExpiration = true;
         options.Events.OnRedirectToLogin = context =>
         {

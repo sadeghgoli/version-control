@@ -1,4 +1,15 @@
-const API = '';
+export function apiBase(): string {
+  const raw = (import.meta.env.VITE_API_URL || 'https://apiweb-versioncontrol.sabzevar.ir:5023').trim();
+  return raw.replace(/\/+$/, '').replace(/\/api$/i, '');
+}
+
+export function apiUrl(path: string): string {
+  if (/^https?:\/\//i.test(path)) {
+    return path;
+  }
+  const suffix = path.startsWith('/') ? path : `/${path}`;
+  return `${apiBase()}${suffix}`;
+}
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
@@ -6,7 +17,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     headers.set('Content-Type', 'application/json');
   }
 
-  const response = await fetch(`${API}${path}`, {
+  const response = await fetch(apiUrl(path), {
     ...init,
     headers,
     credentials: 'include',
