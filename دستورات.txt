@@ -1,0 +1,28 @@
+برای فرانت:
+rm -rf /var/www/vc-apps/*
+cp -r dist/* /var/www/vc-apps/
+
+
+برای سرور:
+systemctl stop version.service
+
+Build:
+
+dotnet build -c Release
+
+اگر Build بدون خطا تمام شد:
+
+systemctl start version.service
+
+بررسی:
+
+systemctl status version.service --no-pager -l
+
+برای فرانت:
+preview: {
+  host: '0.0.0.0',
+  port: 5174,
+  proxy: {
+    '/api': proxyOptions,
+  },
+},
