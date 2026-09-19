@@ -1,7 +1,7 @@
 برای فرانت:
 rm -rf /var/www/vc-apps/*
 cp -r dist/* /var/www/vc-apps/
-
+systemctl restart version-front.service
 
 برای سرور:
 systemctl stop version.service

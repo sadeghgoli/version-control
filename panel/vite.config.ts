@@ -1,7 +1,7 @@
 import { defineConfig, type ProxyOptions } from 'vite';
 import react from '@vitejs/plugin-react';
 
-const remoteApi = 'https://apisrv-gatewayvc.sabzevar.ir';
+const remoteApi = process.env.VITE_PROXY_TARGET ?? 'http://127.0.0.1:5300';
 
 function rewriteSetCookie(value: string): string {
   return value
@@ -29,14 +29,14 @@ export default defineConfig({
   server: {
 	    host: '0.0.0.0',
 
-    port: 5174,
+    port: 5310,
     proxy: {
       '/api': proxyOptions,
     },
   },
   preview: {
 	  host: '0.0.0.0',  
-    port: 5174,
+    port: 5310,
     proxy: {
       '/api': proxyOptions,
     },
